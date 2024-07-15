@@ -13,9 +13,203 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/action/lock": {
+      "post": {
+        "tags": [
+          "action"
+        ],
+        "summary": "POST /action/lock handler to lock an asset",
+        "description": "POST /action/lock handler to lock an asset",
+        "operationId": "lock",
+        "responses": {
+          "200": {
+            "description": "Lock successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Lock not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/transfer": {
+      "post": {
+        "tags": [
+          "action"
+        ],
+        "summary": "POST /action/transfer handler to transfer an asset",
+        "description": "POST /action/transfer handler to transfer an asset",
+        "operationId": "transfer",
+        "responses": {
+          "200": {
+            "description": "Transfer successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Transfer not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/unlock": {
+      "post": {
+        "tags": [
+          "action"
+        ],
+        "summary": "POST /action/unlock handler to unlock an asset",
+        "description": "POST /action/unlock handler to unlock an asset",
+        "operationId": "unlock",
+        "responses": {
+          "200": {
+            "description": "unlock successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "unlock not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract": {
+      "post": {
+        "tags": [
+          "contract"
+        ],
+        "summary": "POST /contract handler to create a contract.",
+        "description": "POST /contract handler to create a contract.",
+        "operationId": "create",
+        "responses": {
+          "200": {
+            "description": "Contract successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Contract not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract/:contract_id": {
+      "put": {
+        "tags": [
+          "contract"
+        ],
+        "summary": "PUT /contract/<contract_id> to update a contract.",
+        "description": "PUT /contract/<contract_id> to update a contract.",
+        "operationId": "update",
+        "responses": {
+          "200": {
+            "description": "Contract successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Contract not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract/:contract_id/execute": {
+      "post": {
+        "tags": [
+          "contract"
+        ],
+        "summary": "POST /contract/<contract_id>/execute to execute a contract.",
+        "description": "POST /contract/<contract_id>/execute to execute a contract.",
+        "operationId": "execute",
+        "responses": {
+          "200": {
+            "description": "Contract successfully executed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Contract not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/healthcheck": {
       "get": {
-        "tags": ["health"],
+        "tags": [
+          "health"
+        ],
         "summary": "GET handler for checking service health.",
         "description": "GET handler for checking service health.",
         "operationId": "healthcheck",
@@ -36,9 +230,75 @@
         }
       }
     },
+    "/identity": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "POST /identity handler to create a new identity.",
+        "description": "POST /identity handler to create a new identity.",
+        "operationId": "create",
+        "responses": {
+          "200": {
+            "description": "Identity created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Identity creation wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/identity/:id": {
+      "put": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
+        "description": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
+        "operationId": "update",
+        "responses": {
+          "200": {
+            "description": "Identity updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Identity update wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ping": {
       "get": {
-        "tags": ["ping"],
+        "tags": [
+          "ping"
+        ],
         "summary": "GET handler for internal pings and availability",
         "description": "GET handler for internal pings and availability",
         "operationId": "get",
@@ -65,7 +325,9 @@
       "AppError": {
         "type": "object",
         "description": "Encodes [JSONAPI error object responses](https://jsonapi.org/examples/#error-objects).\n\nJSONAPI error object -  ALL Fields are technically optional.\n\nThis struct uses the following guidelines:\n\n1. Always encode the StatusCode of the response\n2. Set the title to the `canonical_reason` of the status code.\nAccording to spec, this should NOT change over time.\n3. For unrecoverable errors, encode the detail as the to_string of the error\n\nOther fields not currently captured (but can be added)\n\n- id - a unique identifier for the problem\n- links - a link object with further information about the problem\n- source - a JSON pointer indicating a problem in the request json OR\na parameter specifying a problematic query parameter\n- meta - a meta object containing arbitrary information about the error",
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "properties": {
           "detail": {
             "type": "string",

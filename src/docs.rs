@@ -2,14 +2,25 @@
 
 use crate::{
     error::AppError,
-    routes::{health, ping},
+    routes::{action, contract, health, identity, ping},
 };
 use utoipa::OpenApi;
 
 /// API documentation generator.
 #[derive(OpenApi)]
 #[openapi(
-        paths(health::healthcheck, ping::get),
+        paths(
+               health::healthcheck,
+               ping::get,
+               identity::create,
+               identity::update,
+               contract::create,
+               contract::update,
+               contract::execute,
+               action::transfer,
+               action::lock,
+               action::unlock,
+        ),
         components(schemas(AppError)),
         tags(
             (name = "", description = "ul-api service/middleware")
