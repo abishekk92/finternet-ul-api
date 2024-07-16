@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/abishekk92/finternet-ul-api" target="_blank">
-    <img src="https://raw.githubusercontent.com/abishekk92/finternet-ul-api/main/assets/a_logo.png" alt="finternet-ul-api Logo" width="100"></img>
+    <img src="https://avatars.githubusercontent.com/u/166432555?s=200&v=4" alt="finternet-ul-api Logo" width="100"></img>
   </a>
 
   <h1 align="center">ul-api</h1>
