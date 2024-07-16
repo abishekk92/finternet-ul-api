@@ -6,12 +6,14 @@ use axum::{self, http::StatusCode, Json};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
+use super::identity;
+
 /// Deploy new contract request.
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct NewContract {
     binary_url: String,
     binary_checksum: String,
-    signature: String, // Roll up to a right type
+    signature: identity::Signature,
 }
 
 /// POST /contract handler to create a contract.
@@ -35,7 +37,7 @@ pub async fn create(Json(contract): Json<NewContract>) -> AppResult<StatusCode> 
 pub struct UpdateContract {
     binary_url: String,
     binary_checksum: String,
-    signature: String, // Roll up to a right type
+    signature: identity::Signature,
 }
 
 /// PUT /contract/{contract_id} to update a contract.
@@ -75,8 +77,8 @@ pub async fn delete(_contract_id: Path<String>) -> AppResult<StatusCode> {
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct Transaction {
     contract_id: String,
-    raw_transaction: String,
-    signature: String, // Roll up to a right type
+    raw_transaction: String, // Roll up to a transaction type
+    signature: identity::Signature,
 }
 
 /// POST /contract/<contract_id>/execute to execute a contract.

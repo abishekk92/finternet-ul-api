@@ -21,7 +21,15 @@ use utoipa::OpenApi;
                action::lock,
                action::unlock,
         ),
-        components(schemas(AppError, identity::NewIdentity, identity::UpdateIdentity, contract::NewContract, contract::UpdateContract)),
+        components(schemas(
+                AppError,
+                identity::PublicKey,
+                identity::Signature,
+                identity::NewIdentity,
+                identity::UpdateIdentity,
+                contract::NewContract,
+                contract::UpdateContract
+        )),
         tags(
             (name = "", description = "ul-api service/middleware")
         )

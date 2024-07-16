@@ -441,7 +441,7 @@
             "type": "string"
           },
           "signature": {
-            "type": "string"
+            "$ref": "#/components/schemas/identity.Signature"
           }
         }
       },
@@ -458,12 +458,22 @@
             "type": "string"
           },
           "signature": {
-            "type": "string"
+            "$ref": "#/components/schemas/Signature"
           },
           "signing_key": {
             "$ref": "#/components/schemas/PublicKey"
           }
         }
+      },
+      "PublicKey": {
+        "type": "string",
+        "format": "binary",
+        "description": "Public key or signing key."
+      },
+      "Signature": {
+        "type": "string",
+        "format": "binary",
+        "description": "Signature"
       },
       "UpdateContract": {
         "type": "object",
@@ -481,7 +491,7 @@
             "type": "string"
           },
           "signature": {
-            "type": "string"
+            "$ref": "#/components/schemas/identity.Signature"
           }
         }
       },
@@ -498,7 +508,7 @@
             "type": "string"
           },
           "signature": {
-            "type": "string"
+            "$ref": "#/components/schemas/Signature"
           },
           "signing_key": {
             "$ref": "#/components/schemas/PublicKey"

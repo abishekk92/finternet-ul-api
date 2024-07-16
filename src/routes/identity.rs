@@ -7,7 +7,12 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 /// Public key or signing key.
-pub type PublicKey = [u8; 32];
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct PublicKey([u8; 32]);
+
+/// Signature
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct Signature([u8; 32]);
 
 /// New identity request.
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
@@ -15,7 +20,7 @@ pub struct NewIdentity {
     signing_key: PublicKey, // Or could be bs58 encoded string
     // Add a message and signature to verify the identity
     message: String,
-    signature: String, // Roll up to a right type
+    signature: Signature,
 }
 
 /// POST /identity handler to create a new identity.
@@ -40,7 +45,7 @@ pub struct UpdateIdentity {
     signing_key: PublicKey,
     // Add a message and signature to verify the identity
     message: String,
-    signature: String, // Roll up to a right type
+    signature: Signature,
 }
 
 /// PUT /identity/{id} handler to update an existing identity. i.e rotate keys
