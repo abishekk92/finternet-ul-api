@@ -1,0 +1,348 @@
+openapi: 3.0.3
+info:
+  title: ul-api
+  description: Ledger API for Finternet
+  contact:
+    name: abishekk92
+    email: bhat.abishek@gmail.com
+  license:
+    name: MIT
+  version: 0.1.0
+paths:
+  /action/lock:
+    post:
+      tags:
+        - action
+      summary: POST /action/lock handler to lock an asset
+      description: POST /action/lock handler to lock an asset
+      operationId: lock
+      responses:
+        "200":
+          description: Lock successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "500":
+          description: Lock not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /action/transfer:
+    post:
+      tags:
+        - action
+      summary: POST /action/transfer handler to transfer an asset
+      description: POST /action/transfer handler to transfer an asset
+      operationId: transfer
+      responses:
+        "200":
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "500":
+          description: Transfer not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /action/unlock:
+    post:
+      tags:
+        - action
+      summary: POST /action/unlock handler to unlock an asset
+      description: POST /action/unlock handler to unlock an asset
+      operationId: unlock
+      responses:
+        "200":
+          description: unlock successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "500":
+          description: unlock not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /contract:
+    post:
+      tags:
+        - contract
+      summary: POST /contract handler to create a contract.
+      description: POST /contract handler to create a contract.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewContract'
+        required: true
+      responses:
+        "200":
+          description: Contract successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "500":
+          description: Contract deployment not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /contract/:contract_id/execute:
+    post:
+      tags:
+        - contract
+      summary: POST /contract/<contract_id>/execute to execute a contract.
+      description: POST /contract/<contract_id>/execute to execute a contract.
+      operationId: execute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        "200":
+          description: Contract successfully executed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Contract not found
+        "500":
+          description: Contract could not be executed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /contract/{contract_id}:
+    put:
+      tags:
+        - contract
+      summary: PUT /contract/{contract_id} to update a contract.
+      description: PUT /contract/{contract_id} to update a contract.
+      operationId: update
+      parameters:
+        - name: contract_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContract'
+        required: true
+      responses:
+        "200":
+          description: Contract successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Contract not found
+        "500":
+          description: Contract could not be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /healthcheck:
+    get:
+      tags:
+        - health
+      summary: GET handler for checking service health.
+      description: GET handler for checking service health.
+      operationId: healthcheck
+      responses:
+        "200":
+          description: ul-api healthy
+        "500":
+          description: ul-api not healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /identity:
+    post:
+      tags:
+        - identity
+      summary: POST /identity handler to create a new identity.
+      description: POST /identity handler to create a new identity.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewIdentity'
+        required: true
+      responses:
+        "200":
+          description: Identity created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "500":
+          description: Identity creation wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /identity/{id}:
+    put:
+      tags:
+        - identity
+      summary: PUT /identity/{id} handler to update an existing identity. i.e rotate keys
+      description: PUT /identity/{id} handler to update an existing identity. i.e rotate keys
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          description: Public key (or) signing key of the identity
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIdentity'
+        required: true
+      responses:
+        "200":
+          description: Identity updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Identity not found
+        "500":
+          description: Identity update wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /ping:
+    get:
+      tags:
+        - ping
+      summary: GET handler for internal pings and availability
+      description: GET handler for internal pings and availability
+      operationId: get
+      responses:
+        "200":
+          description: Ping successful
+        "500":
+          description: Ping not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+components:
+  schemas:
+    AppError:
+      type: object
+      description: |-
+        Encodes [JSONAPI error object responses](https://jsonapi.org/examples/#error-objects).
+
+        JSONAPI error object -  ALL Fields are technically optional.
+
+        This struct uses the following guidelines:
+
+        1. Always encode the StatusCode of the response
+        2. Set the title to the `canonical_reason` of the status code.
+        According to spec, this should NOT change over time.
+        3. For unrecoverable errors, encode the detail as the to_string of the error
+
+        Other fields not currently captured (but can be added)
+
+        - id - a unique identifier for the problem
+        - links - a link object with further information about the problem
+        - source - a JSON pointer indicating a problem in the request json OR
+        a parameter specifying a problematic query parameter
+        - meta - a meta object containing arbitrary information about the error
+      required:
+        - status
+      properties:
+        detail:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          example: 200
+          minimum: 0
+        title:
+          type: string
+          nullable: true
+    NewContract:
+      type: object
+      description: Deploy new contract request.
+      required:
+        - binary_url
+        - binary_checksum
+        - signature
+      properties:
+        binary_checksum:
+          type: string
+        binary_url:
+          type: string
+        signature:
+          type: string
+    NewIdentity:
+      type: object
+      description: New identity request.
+      required:
+        - signing_key
+        - message
+        - signature
+      properties:
+        message:
+          type: string
+        signature:
+          type: string
+        signing_key:
+          $ref: '#/components/schemas/PublicKey'
+    UpdateContract:
+      type: object
+      description: Udate an existing contract request.
+      required:
+        - binary_url
+        - binary_checksum
+        - signature
+      properties:
+        binary_checksum:
+          type: string
+        binary_url:
+          type: string
+        signature:
+          type: string
+    UpdateIdentity:
+      type: object
+      description: Update identity request.
+      required:
+        - signing_key
+        - message
+        - signature
+      properties:
+        message:
+          type: string
+        signature:
+          type: string
+        signing_key:
+          $ref: '#/components/schemas/PublicKey'
+tags:
+  - name: ""
+    description: ul-api service/middleware
