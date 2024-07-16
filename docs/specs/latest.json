@@ -117,6 +117,16 @@
         "summary": "POST /contract handler to create a contract.",
         "description": "POST /contract handler to create a contract.",
         "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewContract"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Contract successfully created",
@@ -129,39 +139,7 @@
             }
           },
           "500": {
-            "description": "Contract not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/contract/:contract_id": {
-      "put": {
-        "tags": [
-          "contract"
-        ],
-        "summary": "PUT /contract/<contract_id> to update a contract.",
-        "description": "PUT /contract/<contract_id> to update a contract.",
-        "operationId": "update",
-        "responses": {
-          "200": {
-            "description": "Contract successfully updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Contract not successful",
+            "description": "Contract deployment not successful",
             "content": {
               "application/json": {
                 "schema": {
@@ -181,6 +159,16 @@
         "summary": "POST /contract/<contract_id>/execute to execute a contract.",
         "description": "POST /contract/<contract_id>/execute to execute a contract.",
         "operationId": "execute",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Contract successfully executed",
@@ -192,8 +180,66 @@
               }
             }
           },
+          "404": {
+            "description": "Contract not found"
+          },
           "500": {
-            "description": "Contract not successful",
+            "description": "Contract could not be executed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract/{contract_id}": {
+      "put": {
+        "tags": [
+          "contract"
+        ],
+        "summary": "PUT /contract/{contract_id} to update a contract.",
+        "description": "PUT /contract/{contract_id} to update a contract.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "contract_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContract"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contract successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contract not found"
+          },
+          "500": {
+            "description": "Contract could not be updated",
             "content": {
               "application/json": {
                 "schema": {
@@ -238,6 +284,16 @@
         "summary": "POST /identity handler to create a new identity.",
         "description": "POST /identity handler to create a new identity.",
         "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewIdentity"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Identity created successfully",
@@ -262,14 +318,35 @@
         }
       }
     },
-    "/identity/:id": {
+    "/identity/{id}": {
       "put": {
         "tags": [
           "identity"
         ],
-        "summary": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
-        "description": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
+        "summary": "PUT /identity/{id} handler to update an existing identity. i.e rotate keys",
+        "description": "PUT /identity/{id} handler to update an existing identity. i.e rotate keys",
         "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Public key (or) signing key of the identity",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIdentity"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Identity updated successfully",
@@ -280,6 +357,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Identity not found"
           },
           "500": {
             "description": "Identity update wasn't successfull",
@@ -342,6 +422,86 @@
           "title": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "NewContract": {
+        "type": "object",
+        "description": "Deploy new contract request.",
+        "required": [
+          "binary_url",
+          "binary_checksum",
+          "signature"
+        ],
+        "properties": {
+          "binary_checksum": {
+            "type": "string"
+          },
+          "binary_url": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      },
+      "NewIdentity": {
+        "type": "object",
+        "description": "New identity request.",
+        "required": [
+          "signing_key",
+          "message",
+          "signature"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "signing_key": {
+            "$ref": "#/components/schemas/PublicKey"
+          }
+        }
+      },
+      "UpdateContract": {
+        "type": "object",
+        "description": "Udate an existing contract request.",
+        "required": [
+          "binary_url",
+          "binary_checksum",
+          "signature"
+        ],
+        "properties": {
+          "binary_checksum": {
+            "type": "string"
+          },
+          "binary_url": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateIdentity": {
+        "type": "object",
+        "description": "Update identity request.",
+        "required": [
+          "signing_key",
+          "message",
+          "signature"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "signing_key": {
+            "$ref": "#/components/schemas/PublicKey"
           }
         }
       }
