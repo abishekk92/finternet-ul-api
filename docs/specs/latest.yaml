@@ -9,7 +9,39 @@ info:
     name: MIT
   version: 0.1.0
 paths:
-  /action/lock:
+  /healthcheck:
+    get:
+      tags:
+        - health
+      summary: GET handler for checking service health.
+      description: GET handler for checking service health.
+      operationId: healthcheck
+      responses:
+        "200":
+          description: ul-api healthy
+        "500":
+          description: ul-api not healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /ping:
+    get:
+      tags:
+        - ping
+      summary: GET handler for internal pings and availability
+      description: GET handler for internal pings and availability
+      operationId: get
+      responses:
+        "200":
+          description: Ping successful
+        "500":
+          description: Ping not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /v1/action/lock:
     post:
       tags:
         - action
@@ -29,7 +61,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /action/transfer:
+  /v1/action/transfer:
     post:
       tags:
         - action
@@ -49,7 +81,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /action/unlock:
+  /v1/action/unlock:
     post:
       tags:
         - action
@@ -69,7 +101,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /contract:
+  /v1/contract:
     post:
       tags:
         - contract
@@ -95,12 +127,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /contract/:contract_id/execute:
+  /v1/contract/:contract_id:
+    put:
+      tags:
+        - contract
+      summary: PUT /contract/:contract_id to update a contract.
+      description: PUT /contract/:contract_id to update a contract.
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContract'
+        required: true
+      responses:
+        "200":
+          description: Contract successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Contract not found
+        "500":
+          description: Contract could not be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /v1/contract/:contract_id/execute:
     post:
       tags:
         - contract
-      summary: POST /contract/<contract_id>/execute to execute a contract.
-      description: POST /contract/<contract_id>/execute to execute a contract.
+      summary: POST /contract/:contract_id/execute to execute a contract.
+      description: POST /contract/:contract_id/execute to execute a contract.
       operationId: execute
       requestBody:
         content:
@@ -123,57 +183,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /contract/{contract_id}:
-    put:
-      tags:
-        - contract
-      summary: PUT /contract/{contract_id} to update a contract.
-      description: PUT /contract/{contract_id} to update a contract.
-      operationId: update
-      parameters:
-        - name: contract_id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateContract'
-        required: true
-      responses:
-        "200":
-          description: Contract successfully updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StatusCode'
-        "404":
-          description: Contract not found
-        "500":
-          description: Contract could not be updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /healthcheck:
-    get:
-      tags:
-        - health
-      summary: GET handler for checking service health.
-      description: GET handler for checking service health.
-      operationId: healthcheck
-      responses:
-        "200":
-          description: ul-api healthy
-        "500":
-          description: ul-api not healthy
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /identity:
+  /v1/identity:
     post:
       tags:
         - identity
@@ -199,12 +209,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /identity/{id}:
+  /v1/identity/:id:
     put:
       tags:
         - identity
-      summary: PUT /identity/{id} handler to update an existing identity. i.e rotate keys
-      description: PUT /identity/{id} handler to update an existing identity. i.e rotate keys
+      summary: PUT /identity/:id handler to update an existing identity. i.e rotate keys
+      description: PUT /identity/:id handler to update an existing identity. i.e rotate keys
       operationId: update
       parameters:
         - name: id
@@ -230,22 +240,6 @@ paths:
           description: Identity not found
         "500":
           description: Identity update wasn't successfull
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /ping:
-    get:
-      tags:
-        - ping
-      summary: GET handler for internal pings and availability
-      description: GET handler for internal pings and availability
-      operationId: get
-      responses:
-        "200":
-          description: Ping successful
-        "500":
-          description: Ping not successful
           content:
             application/json:
               schema:

@@ -15,16 +15,23 @@ pub fn setup_app_router() -> Router {
         .layer(axum::middleware::from_fn(log_request_response::<Logger>))
         .route("/ping", get(ping::get))
         .route("/healthcheck", get(health::healthcheck))
-        .route("/identity", post(identity::create))
-        .route("/identity/:id", put(identity::update))
-        .route("/contract", post(contract::create))
+        .route("/v1/identity", post(identity::create))
         .route(
-            "/contract/:id",
+            "/v1/identity/:id",
+            put(identity::update).delete(identity::delete),
+        )
+        .route("/v1/contract", post(contract::create))
+        .route(
+            "/v1/contract/:contract_id",
             put(contract::update).delete(contract::delete),
         )
-        .route("/contract/:id/execute", post(contract::execute))
-        .route("/action/transfer", post(action::transfer))
-        .route("/action/lock", post(action::lock))
-        .route("/action/unlock", post(action::unlock))
+        .route("/v1/contract/:contract_id/execute", post(contract::execute))
+        .route(
+            "/v1/contract/:contract_id/estimate_fee",
+            post(contract::estimate_fee),
+        )
+        .route("/v1/action/transfer", post(action::transfer))
+        .route("/v1/action/lock", post(action::lock))
+        .route("/v1/action/unlock", post(action::unlock))
         .fallback(notfound_404)
 }

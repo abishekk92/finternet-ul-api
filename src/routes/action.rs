@@ -6,7 +6,7 @@ use axum::{self, http::StatusCode};
 /// POST /action/transfer handler to transfer an asset
 #[utoipa::path(
     post,
-    path = "/action/transfer",
+    path = "/v1/action/transfer",
     responses(
         (status = 200, description = "Transfer successful", body=StatusCode),
         (status = 500, description = "Transfer not successful", body=AppError)
@@ -20,7 +20,7 @@ pub async fn transfer() -> AppResult<StatusCode> {
 /// POST /action/lock handler to lock an asset
 #[utoipa::path(
     post,
-    path = "/action/lock",
+    path = "/v1/action/lock",
     responses(
         (status = 200, description = "Lock successful", body=StatusCode),
         (status = 500, description = "Lock not successful", body=AppError)
@@ -34,7 +34,7 @@ pub async fn lock() -> AppResult<StatusCode> {
 /// POST /action/unlock handler to unlock an asset
 #[utoipa::path(
     post,
-    path = "/action/unlock",
+    path = "/v1/action/unlock",
     responses(
         (status = 200, description = "unlock successful", body=StatusCode),
         (status = 500, description = "unlock not successful", body=AppError)

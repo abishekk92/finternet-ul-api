@@ -26,7 +26,7 @@ pub struct NewIdentity {
 /// POST /identity handler to create a new identity.
 #[utoipa::path(
     post,
-    path = "/identity",
+    path = "/v1/identity",
     request_body = NewIdentity,
     responses(
         (status = 200, description = "Identity created successfully", body=StatusCode),
@@ -48,10 +48,10 @@ pub struct UpdateIdentity {
     signature: Signature,
 }
 
-/// PUT /identity/{id} handler to update an existing identity. i.e rotate keys
+/// PUT /identity/:id handler to update an existing identity. i.e rotate keys
 #[utoipa::path(
     put,
-    path = "/identity/{id}",
+    path = "/v1/identity/:id",
     request_body = UpdateIdentity,
     responses(
         (status = 200, description = "Identity updated successfully", body=StatusCode),
@@ -67,5 +67,23 @@ pub async fn update(
     Json(identity): Json<UpdateIdentity>,
 ) -> AppResult<StatusCode> {
     tracing::info!("Updating identity: {:?}", identity);
+    Ok(StatusCode::OK)
+}
+
+/// DELETE /identity/{id} handler to delete an existing identity.
+#[utoipa::path(
+    delete,
+    path = "/v1/identity/:id",
+    responses(
+        (status = 200, description = "Identity deleted successfully", body=StatusCode),
+        (status = NOT_FOUND, description = "Identity not found"),
+        (status = 500, description = "Identity deletion wasn't successfull", body=AppError)
+    ),
+    params(
+        ("id" = String, Path, description = "Public key (or) signing key of the identity")
+    )
+)]
+pub async fn delete(_id: Path<String>) -> AppResult<StatusCode> {
+    tracing::info!("Deleting identity: {:?}", _id);
     Ok(StatusCode::OK)
 }
