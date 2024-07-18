@@ -63,241 +63,13 @@
         }
       }
     },
-    "/v1/action/lock": {
-      "post": {
-        "tags": [
-          "action"
-        ],
-        "summary": "POST /action/lock handler to lock an asset",
-        "description": "POST /action/lock handler to lock an asset",
-        "operationId": "lock",
-        "responses": {
-          "200": {
-            "description": "Lock successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Lock not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/action/transfer": {
-      "post": {
-        "tags": [
-          "action"
-        ],
-        "summary": "POST /action/transfer handler to transfer an asset",
-        "description": "POST /action/transfer handler to transfer an asset",
-        "operationId": "transfer",
-        "responses": {
-          "200": {
-            "description": "Transfer successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Transfer not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/action/unlock": {
-      "post": {
-        "tags": [
-          "action"
-        ],
-        "summary": "POST /action/unlock handler to unlock an asset",
-        "description": "POST /action/unlock handler to unlock an asset",
-        "operationId": "unlock",
-        "responses": {
-          "200": {
-            "description": "unlock successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "unlock not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/contract": {
-      "post": {
-        "tags": [
-          "contract"
-        ],
-        "summary": "POST /contract handler to create a contract.",
-        "description": "POST /contract handler to create a contract.",
-        "operationId": "create",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewContract"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Contract successfully created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Contract deployment not successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/contract/:contract_id": {
-      "put": {
-        "tags": [
-          "contract"
-        ],
-        "summary": "PUT /contract/:contract_id to update a contract.",
-        "description": "PUT /contract/:contract_id to update a contract.",
-        "operationId": "update",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateContract"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Contract successfully updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Contract not found"
-          },
-          "500": {
-            "description": "Contract could not be updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/contract/:contract_id/execute": {
-      "post": {
-        "tags": [
-          "contract"
-        ],
-        "summary": "POST /contract/:contract_id/execute to execute a contract.",
-        "description": "POST /contract/:contract_id/execute to execute a contract.",
-        "operationId": "execute",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Transaction"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Contract successfully executed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatusCode"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Contract not found"
-          },
-          "500": {
-            "description": "Contract could not be executed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/identity": {
       "post": {
         "tags": [
           "identity"
         ],
-        "summary": "POST /identity handler to create a new identity.",
-        "description": "POST /identity handler to create a new identity.",
+        "summary": "Create a new identity",
+        "description": "Create a new identity",
         "operationId": "create",
         "requestBody": {
           "content": {
@@ -333,14 +105,106 @@
         }
       }
     },
-    "/v1/identity/:id": {
-      "put": {
+    "/v1/identity/:id/balance": {
+      "get": {
         "tags": [
           "identity"
         ],
-        "summary": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
-        "description": "PUT /identity/:id handler to update an existing identity. i.e rotate keys",
-        "operationId": "update",
+        "summary": "Get balances of an identity.",
+        "description": "Get balances of an identity.",
+        "operationId": "balance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Public key (or) signing key of the identity",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Balances retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Identity not found"
+          },
+          "500": {
+            "description": "Balances retrieval wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/:id/close": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Close an identity. This is a soft delete, the identity can't be removed from the ledger since it's immutable.",
+        "description": "Close an identity. This is a soft delete, the identity can't be removed from the ledger since it's immutable.",
+        "operationId": "close",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Public key (or) signing key of the identity",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Identity closed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Identity not found"
+          },
+          "500": {
+            "description": "Identity closing wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/:id/rotate_key": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Rotate key to change the signing key of an existing identity.",
+        "description": "Rotate key to change the signing key of an existing identity.",
+        "operationId": "rotate_key",
         "parameters": [
           {
             "name": "id",
@@ -356,7 +220,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateIdentity"
+                "$ref": "#/components/schemas/RotateKey"
               }
             }
           },
@@ -378,6 +242,253 @@
           },
           "500": {
             "description": "Identity update wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Deploy a new smartcontract.",
+        "description": "Deploy a new smartcontract.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSmartContract"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "smartcontract successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "smartcontract deployment not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract/:smartcontract_address/close": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Close a smartcontract. This is a soft delete, the smartcontract can't be removed from the ledger since it's immutable.",
+        "description": "Close a smartcontract. This is a soft delete, the smartcontract can't be removed from the ledger since it's immutable.",
+        "operationId": "close",
+        "responses": {
+          "200": {
+            "description": "Smartcontract successfully closed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Smartcontract not found"
+          },
+          "500": {
+            "description": "Smartcontract could not be closed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract/:smartcontract_address/freeze_upgrade": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Freeze a smartcontract from future upgrades.",
+        "description": "Freeze a smartcontract from future upgrades.",
+        "operationId": "freeze_upgrade",
+        "responses": {
+          "200": {
+            "description": "Smartcontract successfully frozen from upgrades",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Smartcontract not found"
+          },
+          "500": {
+            "description": "Smartcontract could not be froze from upgrades",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract/:smartcontract_address/upgrade": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Upgrade a smartcontract with a new binary.",
+        "description": "Upgrade a smartcontract with a new binary.",
+        "operationId": "upgrade",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpgradeSmartContract"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Smartcontract successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Smartcontract not found"
+          },
+          "500": {
+            "description": "Smartcontract could not be updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract/dry_run": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Submit a transaction to be dry run.",
+        "description": "Submit a transaction to be dry run.",
+        "operationId": "dry_run",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Dry run successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Smartcontract not found"
+          },
+          "500": {
+            "description": "Dry run failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/smartcontract/execute": {
+      "post": {
+        "tags": [
+          "smartcontract"
+        ],
+        "summary": "Submit a transaction to be executed.",
+        "description": "Submit a transaction to be executed.",
+        "operationId": "execute",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Smartcontract successfully executed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Smartcontract not found"
+          },
+          "500": {
+            "description": "Smartcontract could not be executed",
             "content": {
               "application/json": {
                 "schema": {
@@ -415,23 +526,24 @@
           }
         }
       },
-      "NewContract": {
+      "Context": {
         "type": "object",
-        "description": "Deploy new contract request.",
+        "description": "Context",
         "required": [
-          "binary_url",
-          "binary_checksum",
-          "signature"
+          "contract_address",
+          "method",
+          "raw_args"
         ],
         "properties": {
-          "binary_checksum": {
+          "contract_address": {
+            "$ref": "#/components/schemas/PublicKey"
+          },
+          "method": {
             "type": "string"
           },
-          "binary_url": {
-            "type": "string"
-          },
-          "signature": {
-            "$ref": "#/components/schemas/identity.Signature"
+          "raw_args": {
+            "type": "string",
+            "format": "binary"
           }
         }
       },
@@ -455,19 +567,9 @@
           }
         }
       },
-      "PublicKey": {
-        "type": "string",
-        "format": "binary",
-        "description": "Public key or signing key."
-      },
-      "Signature": {
-        "type": "string",
-        "format": "binary",
-        "description": "Signature"
-      },
-      "UpdateContract": {
+      "NewSmartContract": {
         "type": "object",
-        "description": "Udate an existing contract request.",
+        "description": "Deploy a new smartcontract.",
         "required": [
           "binary_url",
           "binary_checksum",
@@ -481,13 +583,18 @@
             "type": "string"
           },
           "signature": {
-            "$ref": "#/components/schemas/identity.Signature"
+            "$ref": "#/components/schemas/Signature"
           }
         }
       },
-      "UpdateIdentity": {
+      "PublicKey": {
+        "type": "string",
+        "format": "binary",
+        "description": "Public key or signing key."
+      },
+      "RotateKey": {
         "type": "object",
-        "description": "Update identity request.",
+        "description": "Rotate key to change the signing key of an existing identity.",
         "required": [
           "signing_key",
           "message",
@@ -502,6 +609,69 @@
           },
           "signing_key": {
             "$ref": "#/components/schemas/PublicKey"
+          }
+        }
+      },
+      "Signature": {
+        "type": "string",
+        "format": "binary",
+        "description": "Signature"
+      },
+      "SignatureRecord": {
+        "type": "object",
+        "description": "SignatureRecord",
+        "required": [
+          "signer",
+          "signature"
+        ],
+        "properties": {
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          },
+          "signer": {
+            "$ref": "#/components/schemas/PublicKey"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "description": "Transaction",
+        "required": [
+          "payload",
+          "signatures"
+        ],
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Context"
+            }
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SignatureRecord"
+            }
+          }
+        }
+      },
+      "UpgradeSmartContract": {
+        "type": "object",
+        "description": "Upgrade a smartcontract with a new binary.",
+        "required": [
+          "binary_url",
+          "binary_checksum",
+          "signature"
+        ],
+        "properties": {
+          "binary_checksum": {
+            "type": "string"
+          },
+          "binary_url": {
+            "type": "string"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
           }
         }
       }

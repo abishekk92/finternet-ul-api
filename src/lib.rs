@@ -15,6 +15,7 @@ pub mod routes;
 pub mod settings;
 pub mod tracer;
 pub mod tracing_layers;
+pub mod types;
 
 /// Test utilities.
 #[cfg(any(test, feature = "test_utils"))]

@@ -2,7 +2,8 @@
 
 use crate::{
     error::AppError,
-    routes::{action, contract, health, identity, ping},
+    routes::{health, identity, ping, smartcontract},
+    types::{Context, PublicKey, Signature, SignatureRecord, Transaction},
 };
 use utoipa::OpenApi;
 
@@ -10,25 +11,30 @@ use utoipa::OpenApi;
 #[derive(OpenApi)]
 #[openapi(
         paths(
+               identity::create,
+               identity::rotate_key,
+               identity::close,
+               identity::balance,
+               smartcontract::create,
+               smartcontract::upgrade,
+               smartcontract::close,
+               smartcontract::freeze_upgrade,
+               smartcontract::execute,
+               smartcontract::dry_run,
                health::healthcheck,
                ping::get,
-               identity::create,
-               identity::update,
-               contract::create,
-               contract::update,
-               contract::execute,
-               action::transfer,
-               action::lock,
-               action::unlock,
         ),
         components(schemas(
                 AppError,
-                identity::PublicKey,
-                identity::Signature,
+                PublicKey,
+                Signature,
+                Transaction,
+                Context,
+                SignatureRecord,
                 identity::NewIdentity,
-                identity::UpdateIdentity,
-                contract::NewContract,
-                contract::UpdateContract
+                identity::RotateKey,
+                smartcontract::NewSmartContract,
+                smartcontract::UpgradeSmartContract,
         )),
         tags(
             (name = "", description = "ul-api service/middleware")
