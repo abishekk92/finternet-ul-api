@@ -1,7 +1,7 @@
 //! smartcontract route.
 
 use crate::error::AppResult;
-use crate::types::{Signature, Transaction};
+use crate::types::{Signature, SmartContractTransaction};
 use axum::extract::Path;
 use axum::{self, http::StatusCode, Json};
 use serde::{Deserialize, Serialize};
@@ -111,7 +111,7 @@ pub async fn freeze_upgrade(_smartcontract_address: Path<String>) -> AppResult<S
         (status = 500, description = "Smartcontract could not be executed", body=AppError)
     )
 )]
-pub async fn execute(Json(transaction): Json<Transaction>) -> AppResult<StatusCode> {
+pub async fn execute(Json(transaction): Json<SmartContractTransaction>) -> AppResult<StatusCode> {
     tracing::info!("Executing transaction: {:?}", transaction);
     // Should ideally return an ACK and a transaction ID
     Ok(StatusCode::OK)
@@ -128,7 +128,7 @@ pub async fn execute(Json(transaction): Json<Transaction>) -> AppResult<StatusCo
         (status = 500, description = "Dry run failed", body=AppError)
     )
 )]
-pub async fn dry_run(Json(transaction): Json<Transaction>) -> AppResult<StatusCode> {
+pub async fn dry_run(Json(transaction): Json<SmartContractTransaction>) -> AppResult<StatusCode> {
     tracing::info!("Dry run for transaction: {:?}", transaction);
     Ok(StatusCode::OK)
 }
@@ -144,7 +144,9 @@ pub async fn dry_run(Json(transaction): Json<Transaction>) -> AppResult<StatusCo
         (status = 500, description = "Fee could not be estimated", body=AppError)
     )
 )]
-pub async fn estimate_fee(Json(transaction): Json<Transaction>) -> AppResult<StatusCode> {
+pub async fn estimate_fee(
+    Json(transaction): Json<SmartContractTransaction>,
+) -> AppResult<StatusCode> {
     tracing::info!("Estimating fee for transaction: {:?}", transaction);
     Ok(StatusCode::OK)
 }

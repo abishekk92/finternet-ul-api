@@ -4,7 +4,7 @@ info:
   description: Ledger API for Finternet
   contact:
     name: abishekk92
-    email: bhat.abishek@gmail.com
+    email: me@shek.dev
   license:
     name: MIT
   version: 0.1.0
@@ -67,13 +67,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/balance:
+  /v1/identity/:id/actions:
     get:
       tags:
         - identity
-      summary: Get balances of an identity.
-      description: Get balances of an identity.
-      operationId: balance
+      summary: Get past actions of an identity. The actions can be filtered by type, time, etc.
+      description: Get past actions of an identity. The actions can be filtered by type, time, etc.
+      operationId: get_actions
+      parameters:
+        - name: id
+          in: path
+          description: Public key (or) signing key of the identity
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionFilter'
+        required: true
+      responses:
+        "200":
+          description: Asset Units retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Identity not found
+        "500":
+          description: Asset Units retrieval wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /v1/identity/:id/asset_units:
+    get:
+      tags:
+        - identity
+      summary: Get asset_units of an identity.
+      description: Get asset_units of an identity.
+      operationId: get_asset_units
       parameters:
         - name: id
           in: path
@@ -83,7 +118,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Balances retrieved successfully
+          description: Asset Units retrieved successfully
           content:
             application/json:
               schema:
@@ -91,7 +126,7 @@ paths:
         "404":
           description: Identity not found
         "500":
-          description: Balances retrieval wasn't successfull
+          description: Asset Units retrieval wasn't successfull
           content:
             application/json:
               schema:
@@ -156,6 +191,41 @@ paths:
           description: Identity not found
         "500":
           description: Identity update wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /v1/identity/:id/submit_action:
+    post:
+      tags:
+        - identity
+      summary: Submit a signed action.
+      description: Submit a signed action.
+      operationId: submit_action
+      parameters:
+        - name: id
+          in: path
+          description: Public key (or) signing key of the identity
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+        required: true
+      responses:
+        "200":
+          description: Action submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Identity not found
+        "500":
+          description: Action submission wasn't successfull
           content:
             application/json:
               schema:
@@ -316,6 +386,62 @@ paths:
                 $ref: '#/components/schemas/AppError'
 components:
   schemas:
+    Action:
+      type: object
+      description: Action
+      required:
+        - payload
+        - signature_record
+      properties:
+        payload:
+          $ref: '#/components/schemas/ActionPayload'
+        signature_record:
+          $ref: '#/components/schemas/SignatureRecord'
+    ActionFilter:
+      type: object
+      description: ActionFilter
+      required:
+        - action_type
+        - asset_type
+        - action_status
+      properties:
+        action_status:
+          $ref: '#/components/schemas/ActionStatus'
+        action_type:
+          $ref: '#/components/schemas/ActionType'
+        asset_type:
+          $ref: '#/components/schemas/AssetType'
+    ActionPayload:
+      type: object
+      description: ActionPayload
+      required:
+        - action_type
+        - asset_type
+        - action_context
+      properties:
+        action_context:
+          $ref: '#/components/schemas/Context'
+        action_type:
+          $ref: '#/components/schemas/ActionType'
+        asset_type:
+          $ref: '#/components/schemas/AssetType'
+    ActionStatus:
+      type: string
+      description: ActionStatus
+      enum:
+        - Pending
+        - Executed
+        - Failed
+        - Cancelled
+        - Finalized
+    ActionType:
+      type: string
+      description: ActionType
+      enum:
+        - FungibleAssetAction
+        - NonFungibleAssetAction
+        - CurrencyAction
+        - PropertyAction
     AppError:
       type: object
       description: |-
@@ -351,6 +477,14 @@ components:
         title:
           type: string
           nullable: true
+    AssetType:
+      type: string
+      description: AssetType
+      enum:
+        - Fungible
+        - NonFungible
+        - Currency
+        - Property
     Context:
       type: object
       description: Context
@@ -366,6 +500,25 @@ components:
         raw_args:
           type: string
           format: binary
+    CurrencyAction:
+      type: string
+      description: Actions on Currency
+      enum:
+        - Send
+        - Receive
+        - Tokenize
+        - Detokenize
+    FungibleAssetAction:
+      type: string
+      description: Actions on Fungible Assets
+      enum:
+        - Send
+        - Receive
+        - Tokenize
+        - Detokenize
+        - Chargeback
+        - Lock
+        - Unlock
     NewIdentity:
       type: object
       description: New identity request.
@@ -394,6 +547,22 @@ components:
           type: string
         signature:
           $ref: '#/components/schemas/Signature'
+    NonFungibleAssetAction:
+      type: string
+      description: Actions on Non Fungible Assets
+      enum:
+        - Rent
+        - Lease
+        - Unlease
+        - TransferOwnership
+    PropertyAction:
+      type: string
+      description: Actions on Non Fungible Assets
+      enum:
+        - Rent
+        - Lease
+        - Unlease
+        - TransferOwnership
     PublicKey:
       type: string
       format: binary
@@ -427,9 +596,9 @@ components:
           $ref: '#/components/schemas/Signature'
         signer:
           $ref: '#/components/schemas/PublicKey'
-    Transaction:
+    SmartContractTransaction:
       type: object
-      description: Transaction
+      description: SmartContractTransaction
       required:
         - payload
         - signatures

@@ -5,7 +5,7 @@
     "description": "Ledger API for Finternet",
     "contact": {
       "name": "abishekk92",
-      "email": "bhat.abishek@gmail.com"
+      "email": "me@shek.dev"
     },
     "license": {
       "name": "MIT"
@@ -105,14 +105,70 @@
         }
       }
     },
-    "/v1/identity/:id/balance": {
+    "/v1/identity/:id/actions": {
       "get": {
         "tags": [
           "identity"
         ],
-        "summary": "Get balances of an identity.",
-        "description": "Get balances of an identity.",
-        "operationId": "balance",
+        "summary": "Get past actions of an identity. The actions can be filtered by type, time, etc.",
+        "description": "Get past actions of an identity. The actions can be filtered by type, time, etc.",
+        "operationId": "get_actions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Public key (or) signing key of the identity",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionFilter"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Asset Units retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Identity not found"
+          },
+          "500": {
+            "description": "Asset Units retrieval wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/:id/asset_units": {
+      "get": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Get asset_units of an identity.",
+        "description": "Get asset_units of an identity.",
+        "operationId": "get_asset_units",
         "parameters": [
           {
             "name": "id",
@@ -126,7 +182,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Balances retrieved successfully",
+            "description": "Asset Units retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -139,7 +195,7 @@
             "description": "Identity not found"
           },
           "500": {
-            "description": "Balances retrieval wasn't successfull",
+            "description": "Asset Units retrieval wasn't successfull",
             "content": {
               "application/json": {
                 "schema": {
@@ -242,6 +298,62 @@
           },
           "500": {
             "description": "Identity update wasn't successfull",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/identity/:id/submit_action": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Submit a signed action.",
+        "description": "Submit a signed action.",
+        "operationId": "submit_action",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Public key (or) signing key of the identity",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Action"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Action submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCode"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Identity not found"
+          },
+          "500": {
+            "description": "Action submission wasn't successfull",
             "content": {
               "application/json": {
                 "schema": {
@@ -503,6 +615,83 @@
   },
   "components": {
     "schemas": {
+      "Action": {
+        "type": "object",
+        "description": "Action",
+        "required": [
+          "payload",
+          "signature_record"
+        ],
+        "properties": {
+          "payload": {
+            "$ref": "#/components/schemas/ActionPayload"
+          },
+          "signature_record": {
+            "$ref": "#/components/schemas/SignatureRecord"
+          }
+        }
+      },
+      "ActionFilter": {
+        "type": "object",
+        "description": "ActionFilter",
+        "required": [
+          "action_type",
+          "asset_type",
+          "action_status"
+        ],
+        "properties": {
+          "action_status": {
+            "$ref": "#/components/schemas/ActionStatus"
+          },
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType"
+          },
+          "asset_type": {
+            "$ref": "#/components/schemas/AssetType"
+          }
+        }
+      },
+      "ActionPayload": {
+        "type": "object",
+        "description": "ActionPayload",
+        "required": [
+          "action_type",
+          "asset_type",
+          "action_context"
+        ],
+        "properties": {
+          "action_context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "action_type": {
+            "$ref": "#/components/schemas/ActionType"
+          },
+          "asset_type": {
+            "$ref": "#/components/schemas/AssetType"
+          }
+        }
+      },
+      "ActionStatus": {
+        "type": "string",
+        "description": "ActionStatus",
+        "enum": [
+          "Pending",
+          "Executed",
+          "Failed",
+          "Cancelled",
+          "Finalized"
+        ]
+      },
+      "ActionType": {
+        "type": "string",
+        "description": "ActionType",
+        "enum": [
+          "FungibleAssetAction",
+          "NonFungibleAssetAction",
+          "CurrencyAction",
+          "PropertyAction"
+        ]
+      },
       "AppError": {
         "type": "object",
         "description": "Encodes [JSONAPI error object responses](https://jsonapi.org/examples/#error-objects).\n\nJSONAPI error object -  ALL Fields are technically optional.\n\nThis struct uses the following guidelines:\n\n1. Always encode the StatusCode of the response\n2. Set the title to the `canonical_reason` of the status code.\nAccording to spec, this should NOT change over time.\n3. For unrecoverable errors, encode the detail as the to_string of the error\n\nOther fields not currently captured (but can be added)\n\n- id - a unique identifier for the problem\n- links - a link object with further information about the problem\n- source - a JSON pointer indicating a problem in the request json OR\na parameter specifying a problematic query parameter\n- meta - a meta object containing arbitrary information about the error",
@@ -526,6 +715,16 @@
           }
         }
       },
+      "AssetType": {
+        "type": "string",
+        "description": "AssetType",
+        "enum": [
+          "Fungible",
+          "NonFungible",
+          "Currency",
+          "Property"
+        ]
+      },
       "Context": {
         "type": "object",
         "description": "Context",
@@ -546,6 +745,29 @@
             "format": "binary"
           }
         }
+      },
+      "CurrencyAction": {
+        "type": "string",
+        "description": "Actions on Currency",
+        "enum": [
+          "Send",
+          "Receive",
+          "Tokenize",
+          "Detokenize"
+        ]
+      },
+      "FungibleAssetAction": {
+        "type": "string",
+        "description": "Actions on Fungible Assets",
+        "enum": [
+          "Send",
+          "Receive",
+          "Tokenize",
+          "Detokenize",
+          "Chargeback",
+          "Lock",
+          "Unlock"
+        ]
       },
       "NewIdentity": {
         "type": "object",
@@ -586,6 +808,26 @@
             "$ref": "#/components/schemas/Signature"
           }
         }
+      },
+      "NonFungibleAssetAction": {
+        "type": "string",
+        "description": "Actions on Non Fungible Assets",
+        "enum": [
+          "Rent",
+          "Lease",
+          "Unlease",
+          "TransferOwnership"
+        ]
+      },
+      "PropertyAction": {
+        "type": "string",
+        "description": "Actions on Non Fungible Assets",
+        "enum": [
+          "Rent",
+          "Lease",
+          "Unlease",
+          "TransferOwnership"
+        ]
       },
       "PublicKey": {
         "type": "string",
@@ -633,9 +875,9 @@
           }
         }
       },
-      "Transaction": {
+      "SmartContractTransaction": {
         "type": "object",
-        "description": "Transaction",
+        "description": "SmartContractTransaction",
         "required": [
           "payload",
           "signatures"

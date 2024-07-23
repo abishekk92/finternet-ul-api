@@ -11,7 +11,7 @@ edition = "2021"
 rust-version = "1.67"
 documentation = "https://docs.rs/ul-api"
 repository = "https://github.com/abishekk92/finternet-ul-api"
-authors = ["abishekk92 <bhat.abishek@gmail.com>"]
+authors = ["abishekk92 <me@shek.dev>"]
 default-run = "ul-api-app"
 
 [lib]
