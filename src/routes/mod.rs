@@ -1,5 +1,6 @@
 //! Routes for [axum::Router].
 
+pub mod action;
 pub mod fallback;
 pub mod health;
 pub mod identity;

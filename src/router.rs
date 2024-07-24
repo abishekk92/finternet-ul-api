@@ -2,10 +2,10 @@
 
 use crate::{
     middleware::logging::{log_request_response, Logger},
-    routes::{fallback::notfound_404, health, identity, ping, smartcontract},
+    routes::{action, fallback::notfound_404, health, identity, ping, smartcontract},
 };
 use axum::{
-    routing::{get, post, put},
+    routing::{delete, get, post, put},
     Router,
 };
 
@@ -15,20 +15,14 @@ pub fn setup_app_router() -> Router {
         .layer(axum::middleware::from_fn(log_request_response::<Logger>))
         .route("/v1/identity", post(identity::create))
         .route("/v1/identity/:id/rotate_key", post(identity::rotate_key))
-        .route("/v1/identity/:id/close", post(identity::close))
+        .route("/v1/identity/:id/close", delete(identity::close))
         .route(
             "/v1/identity/:id/asset_units",
             get(identity::get_asset_units),
         )
-        .route("/v1/identity/:id/actions", get(identity::get_actions))
-        .route(
-            "/v1/identity/:id/submit_action",
-            post(identity::submit_action),
-        )
-        .route(
-            "/v/1/identity/:id/actions/:action_id",
-            get(identity::get_action_status),
-        )
+        .route("/v1/identity/:id/actions", get(identity::actions))
+        .route("/v1/submit_action", post(action::submit))
+        .route("/v1/action/:action_id", get(action::get))
         .route("/v1/smartcontract", post(smartcontract::create))
         .route(
             "/v1/smartcontract/:smartcontract_address/upgrade",

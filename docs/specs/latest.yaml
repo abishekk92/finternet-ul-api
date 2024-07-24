@@ -41,6 +41,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
+  /v1/action/:action_id:
+    get:
+      tags:
+        - action
+      summary: Get action
+      description: Get action
+      operationId: get
+      parameters:
+        - name: id
+          in: path
+          description: Public key (or) signing key of the identity
+          required: true
+          schema:
+            type: string
+        - name: action_id
+          in: path
+          description: Action ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Action status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Action not found
+        "500":
+          description: Action status retrieval wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
+  /v1/action/submit:
+    post:
+      tags:
+        - action
+      summary: Submit a signed action.
+      description: Submit a signed action.
+      operationId: submit
+      parameters:
+        - name: id
+          in: path
+          description: Public key (or) signing key of the identity
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+        required: true
+      responses:
+        "200":
+          description: Action submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Identity not found
+        "500":
+          description: Action submission wasn't successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
   /v1/identity:
     post:
       tags:
@@ -73,7 +143,7 @@ paths:
         - identity
       summary: Get past actions of an identity. The actions can be filtered by type, time, etc.
       description: Get past actions of an identity. The actions can be filtered by type, time, etc.
-      operationId: get_actions
+      operationId: actions
       parameters:
         - name: id
           in: path
@@ -132,7 +202,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppError'
   /v1/identity/:id/close:
-    post:
+    delete:
       tags:
         - identity
       summary: Close an identity. This is a soft delete, the identity can't be removed from the ledger since it's immutable.
@@ -191,41 +261,6 @@ paths:
           description: Identity not found
         "500":
           description: Identity update wasn't successfull
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/submit_action:
-    post:
-      tags:
-        - identity
-      summary: Submit a signed action.
-      description: Submit a signed action.
-      operationId: submit_action
-      parameters:
-        - name: id
-          in: path
-          description: Public key (or) signing key of the identity
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Action'
-        required: true
-      responses:
-        "200":
-          description: Action submitted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StatusCode'
-        "404":
-          description: Identity not found
-        "500":
-          description: Action submission wasn't successfull
           content:
             application/json:
               schema:

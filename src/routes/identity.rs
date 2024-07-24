@@ -1,7 +1,7 @@
 //! Identity route.
 
 use crate::error::AppResult;
-use crate::types::{Action, ActionFilter, PublicKey, Signature};
+use crate::types::{ActionFilter, PublicKey, Signature};
 use axum::extract::Path;
 use axum::{self, http::StatusCode, Json};
 use serde::{Deserialize, Serialize};
@@ -65,7 +65,7 @@ pub async fn rotate_key(
 
 /// Close an identity. This is a soft delete, the identity can't be removed from the ledger since it's immutable.
 #[utoipa::path(
-    post,
+    delete,
     path = "/v1/identity/:id/close",
     responses(
         (status = 200, description = "Identity closed successfully", body=StatusCode),
@@ -98,46 +98,6 @@ pub async fn get_asset_units(_id: Path<String>) -> AppResult<StatusCode> {
     Ok(StatusCode::OK)
 }
 
-/// Submit a signed action.
-#[utoipa::path(
-    post,
-    path = "/v1/identity/:id/submit_action",
-    request_body = Action,
-    responses(
-        (status = 200, description = "Action submitted successfully", body=StatusCode),
-        (status = NOT_FOUND, description = "Identity not found"),
-        (status = 500, description = "Action submission wasn't successfull", body=AppError)
-    ),
-    params(
-        ("id" = String, Path, description = "Public key (or) signing key of the identity")
-    )
-)]
-pub async fn submit_action(_id: Path<String>, Json(action): Json<Action>) -> AppResult<StatusCode> {
-    tracing::info!("Submitting action: {:?}", action);
-    Ok(StatusCode::OK)
-}
-
-/// Get status of an action.
-#[utoipa::path(
-    get,
-    path = "/v1/identity/:id/actions/:action_id",
-    responses(
-        (status = 200, description = "Action status retrieved successfully", body=StatusCode),
-        (status = NOT_FOUND, description = "Action not found"),
-        (status = 500, description = "Action status retrieval wasn't successfull", body=AppError)
-    ),
-    params(
-        ("id" = String, Path, description = "Public key (or) signing key of the identity"),
-        ("action_id" = String, Path, description = "Action ID")
-    )
-)]
-pub async fn get_action_status(
-    _id: Path<String>,
-    _action_id: Path<String>,
-) -> AppResult<StatusCode> {
-    Ok(StatusCode::OK)
-}
-
 /// Get past actions of an identity. The actions can be filtered by type, time, etc.
 #[utoipa::path(
     get,
@@ -152,7 +112,7 @@ pub async fn get_action_status(
         ("id" = String, Path, description = "Public key (or) signing key of the identity")
     )
 )]
-pub async fn get_actions(
+pub async fn actions(
     _id: Path<String>,
     Json(action_filter): Json<ActionFilter>,
 ) -> AppResult<StatusCode> {
