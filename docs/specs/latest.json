@@ -741,8 +741,6 @@
         "type": "string",
         "description": "ActionType",
         "enum": [
-          "FungibleAssetAction",
-          "NonFungibleAssetAction",
           "CurrencyAction",
           "PropertyAction"
         ]
@@ -774,8 +772,6 @@
         "type": "string",
         "description": "AssetType",
         "enum": [
-          "Fungible",
-          "NonFungible",
           "Currency",
           "Property"
         ]
@@ -803,25 +799,12 @@
       },
       "CurrencyAction": {
         "type": "string",
-        "description": "Actions on Currency",
+        "description": "Actions on Currency or Bearer Assets",
         "enum": [
           "Send",
           "Receive",
           "Tokenize",
           "Detokenize"
-        ]
-      },
-      "FungibleAssetAction": {
-        "type": "string",
-        "description": "Actions on Fungible Assets",
-        "enum": [
-          "Send",
-          "Receive",
-          "Tokenize",
-          "Detokenize",
-          "Chargeback",
-          "Lock",
-          "Unlock"
         ]
       },
       "NewIdentity": {
@@ -863,16 +846,6 @@
             "$ref": "#/components/schemas/Signature"
           }
         }
-      },
-      "NonFungibleAssetAction": {
-        "type": "string",
-        "description": "Actions on Non Fungible Assets",
-        "enum": [
-          "Rent",
-          "Lease",
-          "Unlease",
-          "TransferOwnership"
-        ]
       },
       "PropertyAction": {
         "type": "string",

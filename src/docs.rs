@@ -40,8 +40,6 @@ use utoipa::OpenApi;
                 ActionPayload,
                 ActionType,
                 AssetType,
-                FungibleAssetAction,
-                NonFungibleAssetAction,
                 CurrencyAction,
                 PropertyAction,
                 identity::NewIdentity,

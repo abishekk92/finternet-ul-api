@@ -51,36 +51,13 @@ pub struct ActionPayload {
 /// ActionType
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub enum ActionType {
-    /// Actions on Fungible Assets
-    FungibleAssetAction,
-    /// Actions on Non Fungible Assets
-    NonFungibleAssetAction,
     /// Actions on Currency
     CurrencyAction,
     /// Actions on Property
     PropertyAction,
 }
 
-/// Actions on Fungible Assets
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
-pub enum FungibleAssetAction {
-    /// Send asset unit
-    Send,
-    /// Receive asset unit
-    Receive,
-    /// Tokenize asset unit
-    Tokenize,
-    /// Detokenize asset unit
-    Detokenize,
-    /// Chargeback asset unit
-    Chargeback,
-    /// Lock asset unit
-    Lock,
-    /// Unlock asset unit
-    Unlock,
-}
-
-/// Actions on Currency
+/// Actions on Currency or Bearer Assets
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub enum CurrencyAction {
     /// Send asset unit
@@ -91,19 +68,6 @@ pub enum CurrencyAction {
     Tokenize,
     /// Detokenize asset unit
     Detokenize,
-}
-
-/// Actions on Non Fungible Assets
-#[derive(Debug, Serialize, Deserialize, ToSchema)]
-pub enum NonFungibleAssetAction {
-    /// Rent asset unit
-    Rent,
-    /// Lease asset unit
-    Lease,
-    /// Unlease asset unit
-    Unlease,
-    /// Transfer ownership of asset unit
-    TransferOwnership,
 }
 
 /// Actions on Non Fungible Assets
@@ -122,10 +86,6 @@ pub enum PropertyAction {
 /// AssetType
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub enum AssetType {
-    /// Fungible
-    Fungible,
-    /// NonFungible
-    NonFungible,
     /// Currency
     Currency,
     /// Property

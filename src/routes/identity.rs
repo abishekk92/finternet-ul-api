@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 /// New identity request.
+// TODO: Should probably just be a DID directly?
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct NewIdentity {
     signing_key: PublicKey, // Or could be bs58 encoded string
@@ -117,5 +118,23 @@ pub async fn actions(
     Json(action_filter): Json<ActionFilter>,
 ) -> AppResult<StatusCode> {
     tracing::info!("Getting actions: {:?}", action_filter);
+    Ok(StatusCode::OK)
+}
+
+/// Attach a verifiable credential to an identity.
+#[utoipa::path(
+    post,
+    path = "/v1/identity/:id/attach_credential",
+    responses(
+        (status = 200, description = "Credential attached successfully", body=StatusCode),
+        (status = NOT_FOUND, description = "Identity not found"),
+        (status = 500, description = "Credential attachment wasn't successfull", body=AppError)
+    ),
+    params(
+        ("id" = String, Path, description = "Public key (or) signing key of the identity")
+    )
+)]
+pub async fn attach_credential(_id: Path<String>) -> AppResult<StatusCode> {
+    tracing::info!("Attaching credential to id: {:?}", _id);
     Ok(StatusCode::OK)
 }

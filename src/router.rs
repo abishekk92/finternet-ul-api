@@ -10,6 +10,7 @@ use axum::{
 };
 
 /// Setup main router for application.
+// TODO: Nest and reorganize routes in a more structured way
 pub fn setup_app_router() -> Router {
     Router::new()
         .layer(axum::middleware::from_fn(log_request_response::<Logger>))
