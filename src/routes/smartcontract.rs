@@ -18,7 +18,7 @@ pub struct NewSmartContract {
 /// Deploy a new smartcontract.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract",
+    path = "/v1/ledger/smartcontract",
     request_body = NewSmartContract,
     responses(
         (status = 200, description = "smartcontract successfully created", body=StatusCode),
@@ -34,7 +34,7 @@ pub async fn create(Json(smartcontract): Json<NewSmartContract>) -> AppResult<St
 /// Retrieve a smartcontract's ABI or IDL
 #[utoipa::path(
     get,
-    path = "/v1/smartcontract/:smartcontract_address",
+    path = "/v1/ledger/smartcontract/:smartcontract_address",
     request_body = Newsmartcontract,
     responses(
         (status = 200, description = "Smartcontract successfully created", body=StatusCode),
@@ -56,7 +56,7 @@ pub struct UpgradeSmartContract {
 /// Upgrade a smartcontract with a new binary.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/:smartcontract_address/upgrade",
+    path = "/v1/ledger/smartcontract/:smartcontract_address/upgrade",
     request_body = UpgradeSmartContract,
     responses(
         (status = 200, description = "Smartcontract successfully updated", body=StatusCode),
@@ -75,7 +75,7 @@ pub async fn upgrade(
 /// Close a smartcontract. This is a soft delete, the smartcontract can't be removed from the ledger since it's immutable.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/:smartcontract_address/close",
+    path = "/v1/ledger/smartcontract/:smartcontract_address/close",
     responses(
         (status = 200, description = "Smartcontract successfully closed", body=StatusCode),
         (status = NOT_FOUND, description = "Smartcontract not found"),
@@ -89,7 +89,7 @@ pub async fn close(_smartcontract_address: Path<String>) -> AppResult<StatusCode
 /// Freeze a smartcontract from future upgrades.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/:smartcontract_address/freeze_upgrade",
+    path = "/v1/ledger/smartcontract/:smartcontract_address/freeze_upgrade",
     responses(
         (status = 200, description = "Smartcontract successfully frozen from upgrades", body=StatusCode),
         (status = NOT_FOUND, description = "Smartcontract not found"),
@@ -103,7 +103,7 @@ pub async fn freeze_upgrade(_smartcontract_address: Path<String>) -> AppResult<S
 /// Submit a transaction to be executed.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/execute",
+    path = "/v1/ledger/smartcontract/execute",
     request_body = Transaction,
     responses(
         (status = 200, description = "Smartcontract successfully executed", body=StatusCode),
@@ -120,7 +120,7 @@ pub async fn execute(Json(transaction): Json<SmartContractTransaction>) -> AppRe
 /// Submit a transaction to be dry run.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/dry_run",
+    path = "/v1/ledger/smartcontract/dry_run",
     request_body = Transaction,
     responses(
         (status = 200, description = "Dry run successful", body=StatusCode),
@@ -136,7 +136,7 @@ pub async fn dry_run(Json(transaction): Json<SmartContractTransaction>) -> AppRe
 /// Submit a transaction to get an estimate of the fee.
 #[utoipa::path(
     post,
-    path = "/v1/smartcontract/estimate_fee",
+    path = "/v1/ledger/smartcontract/estimate_fee",
     request_body = Transaction,
     responses(
         (status = 200, description = "Fee estimate for executing the transaction", body=StatusCode),

@@ -8,7 +8,7 @@ use axum::{self, http::StatusCode, Json};
 /// Submit a signed action.
 #[utoipa::path(
     post,
-    path = "/v1/action/submit",
+    path = "/v1/ledger/action/submit",
     request_body = Action,
     responses(
         (status = 200, description = "Action submitted successfully", body=StatusCode),
@@ -27,7 +27,7 @@ pub async fn submit(Json(action): Json<Action>) -> AppResult<StatusCode> {
 /// Get action
 #[utoipa::path(
     get,
-    path = "/v1/action/:action_id",
+    path = "/v1/ledger/action/:action_id",
     responses(
         (status = 200, description = "Action status retrieved successfully", body=StatusCode),
         (status = NOT_FOUND, description = "Action not found"),

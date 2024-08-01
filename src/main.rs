@@ -12,9 +12,7 @@ use std::{
 };
 use tokio::signal;
 #[cfg(unix)]
-use tokio::signal::{
-    unix::{signal, SignalKind},
-};
+use tokio::signal::unix::{signal, SignalKind};
 use tower::ServiceBuilder;
 use tower_http::{
     catch_panic::CatchPanicLayer, sensitive_headers::SetSensitiveHeadersLayer,
@@ -26,8 +24,6 @@ use tracing_subscriber::{
     prelude::*,
     EnvFilter,
 };
-use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
 use ul_api::{
     docs::ApiDoc,
     metrics::{process, prom::setup_metrics_recorder},
@@ -42,6 +38,8 @@ use ul_api::{
         storage_layer::StorageLayer,
     },
 };
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 /// Request identifier field.
 const REQUEST_ID: &str = "request_id";

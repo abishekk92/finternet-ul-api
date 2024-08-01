@@ -27,8 +27,7 @@ use utoipa::OpenApi;
                health::healthcheck,
                ping::get,
         ),
-        components(schemas(
-                AppError,
+        components(schemas( AppError,
                 PublicKey,
                 Signature,
                 SmartContractTransaction,

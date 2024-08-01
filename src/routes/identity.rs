@@ -20,7 +20,7 @@ pub struct NewIdentity {
 /// Create a new identity
 #[utoipa::path(
     post,
-    path = "/v1/identity",
+    path = "/v1/ledger/identity",
     request_body = NewIdentity,
     responses(
         (status = 200, description = "Identity created successfully", body=StatusCode),
@@ -45,7 +45,7 @@ pub struct RotateKey {
 /// Rotate key to change the signing key of an existing identity.
 #[utoipa::path(
     post,
-    path = "/v1/identity/:id/rotate_key",
+    path = "/v1/ledger/identity/:id/rotate_key",
     request_body = RotateKey,
     responses(
         (status = 200, description = "Identity updated successfully", body=StatusCode),
@@ -67,7 +67,7 @@ pub async fn rotate_key(
 /// Close an identity. This is a soft delete, the identity can't be removed from the ledger since it's immutable.
 #[utoipa::path(
     delete,
-    path = "/v1/identity/:id/close",
+    path = "/v1/ledger/identity/:id/close",
     responses(
         (status = 200, description = "Identity closed successfully", body=StatusCode),
         (status = NOT_FOUND, description = "Identity not found"),
@@ -85,7 +85,7 @@ pub async fn close(_id: Path<String>) -> AppResult<StatusCode> {
 /// Get asset_units of an identity.
 #[utoipa::path(
     get,
-    path = "/v1/identity/:id/asset_units",
+    path = "/v1/ledger/identity/:id/asset_units",
     responses(
         (status = 200, description = "Asset Units retrieved successfully", body=StatusCode),
         (status = NOT_FOUND, description = "Identity not found"),
@@ -102,7 +102,7 @@ pub async fn get_asset_units(_id: Path<String>) -> AppResult<StatusCode> {
 /// Get past actions of an identity. The actions can be filtered by type, time, etc.
 #[utoipa::path(
     get,
-    path = "/v1/identity/:id/actions",
+    path = "/v1/ledger/identity/:id/actions",
     request_body = ActionFilter,
     responses(
         (status = 200, description = "Asset Units retrieved successfully", body=StatusCode),
@@ -124,7 +124,7 @@ pub async fn actions(
 /// Attach a verifiable credential to an identity.
 #[utoipa::path(
     post,
-    path = "/v1/identity/:id/attach_credential",
+    path = "/v1/ledger/identity/:id/attach_credential",
     responses(
         (status = 200, description = "Credential attached successfully", body=StatusCode),
         (status = NOT_FOUND, description = "Identity not found"),

@@ -12,46 +12,52 @@ use axum::{
 /// Setup main router for application.
 // TODO: Nest and reorganize routes in a more structured way
 pub fn setup_app_router() -> Router {
-    Router::new()
-        .layer(axum::middleware::from_fn(log_request_response::<Logger>))
-        .route("/v1/identity", post(identity::create))
-        .route("/v1/identity/:id/rotate_key", post(identity::rotate_key))
-        .route("/v1/identity/:id/close", delete(identity::close))
+    let identity_router = Router::new()
+        .route("/", post(identity::create))
+        .route("/:id/rotate_key", post(identity::rotate_key))
+        .route("/:id/close", delete(identity::close))
+        .route("/:id/asset_units", get(identity::get_asset_units))
+        .route("/:id/actions", get(identity::actions));
+
+    let action_router = Router::new()
+        .route("/", post(action::submit))
+        .route("/:action_id", get(action::get));
+
+    let smartcontract_router = Router::new()
+        .route("/", post(smartcontract::create))
         .route(
-            "/v1/identity/:id/asset_units",
-            get(identity::get_asset_units),
-        )
-        .route("/v1/identity/:id/actions", get(identity::actions))
-        .route("/v1/submit_action", post(action::submit))
-        .route("/v1/action/:action_id", get(action::get))
-        .route("/v1/smartcontract", post(smartcontract::create))
-        .route(
-            "/v1/smartcontract/:smartcontract_address/upgrade",
+            "/:smartcontract_address/upgrade",
             put(smartcontract::upgrade),
         )
-        .route(
-            "/v1/smartcontract/:smartcontract_address/close",
-            post(smartcontract::close),
-        )
+        .route("/:smartcontract_address/close", post(smartcontract::close))
         .route(
             // Freeze probably not the best name for this endpoint
             // Could be confused with freezing assets
-            "/v1/smartcontract/:smartcontract_address/freeze_upgrade",
+            "/:smartcontract_address/freeze_upgrade",
             post(smartcontract::freeze_upgrade),
         )
         .route(
-            "/v1/smartcontract/:smartcontract_address/execute",
+            "/:smartcontract_address/execute",
             post(smartcontract::execute),
         )
         .route(
-            "/v1/smartcontract/:smartcontract_address/dry_run",
+            "/:smartcontract_address/dry_run",
             post(smartcontract::dry_run),
         )
         .route(
-            "/v1/smartcontract/:smartcontract_address/estimate_fee",
+            "/:smartcontract_address/estimate_fee",
             post(smartcontract::estimate_fee),
-        )
+        );
+
+    let ledger_router = Router::new()
+        .nest("/identity", identity_router)
+        .nest("/action", action_router)
+        .nest("/smartcontract", smartcontract_router);
+
+    Router::new()
+        .layer(axum::middleware::from_fn(log_request_response::<Logger>))
         .route("/ping", get(ping::get))
         .route("/healthcheck", get(health::healthcheck))
+        .nest("/v1/ledger", ledger_router)
         .fallback(notfound_404)
 }

@@ -63,7 +63,7 @@
         }
       }
     },
-    "/v1/action/:action_id": {
+    "/v1/ledger/action/:action_id": {
       "get": {
         "tags": [
           "action"
@@ -118,7 +118,7 @@
         }
       }
     },
-    "/v1/action/submit": {
+    "/v1/ledger/action/submit": {
       "post": {
         "tags": [
           "action"
@@ -174,7 +174,7 @@
         }
       }
     },
-    "/v1/identity": {
+    "/v1/ledger/identity": {
       "post": {
         "tags": [
           "identity"
@@ -216,7 +216,7 @@
         }
       }
     },
-    "/v1/identity/:id/actions": {
+    "/v1/ledger/identity/:id/actions": {
       "get": {
         "tags": [
           "identity"
@@ -272,7 +272,7 @@
         }
       }
     },
-    "/v1/identity/:id/asset_units": {
+    "/v1/ledger/identity/:id/asset_units": {
       "get": {
         "tags": [
           "identity"
@@ -318,7 +318,7 @@
         }
       }
     },
-    "/v1/identity/:id/close": {
+    "/v1/ledger/identity/:id/close": {
       "delete": {
         "tags": [
           "identity"
@@ -364,7 +364,7 @@
         }
       }
     },
-    "/v1/identity/:id/rotate_key": {
+    "/v1/ledger/identity/:id/rotate_key": {
       "post": {
         "tags": [
           "identity"
@@ -420,7 +420,7 @@
         }
       }
     },
-    "/v1/smartcontract": {
+    "/v1/ledger/smartcontract": {
       "post": {
         "tags": [
           "smartcontract"
@@ -462,7 +462,7 @@
         }
       }
     },
-    "/v1/smartcontract/:smartcontract_address/close": {
+    "/v1/ledger/smartcontract/:smartcontract_address/close": {
       "post": {
         "tags": [
           "smartcontract"
@@ -497,7 +497,7 @@
         }
       }
     },
-    "/v1/smartcontract/:smartcontract_address/freeze_upgrade": {
+    "/v1/ledger/smartcontract/:smartcontract_address/freeze_upgrade": {
       "post": {
         "tags": [
           "smartcontract"
@@ -532,7 +532,7 @@
         }
       }
     },
-    "/v1/smartcontract/:smartcontract_address/upgrade": {
+    "/v1/ledger/smartcontract/:smartcontract_address/upgrade": {
       "post": {
         "tags": [
           "smartcontract"
@@ -577,7 +577,7 @@
         }
       }
     },
-    "/v1/smartcontract/dry_run": {
+    "/v1/ledger/smartcontract/dry_run": {
       "post": {
         "tags": [
           "smartcontract"
@@ -622,7 +622,7 @@
         }
       }
     },
-    "/v1/smartcontract/execute": {
+    "/v1/ledger/smartcontract/execute": {
       "post": {
         "tags": [
           "smartcontract"

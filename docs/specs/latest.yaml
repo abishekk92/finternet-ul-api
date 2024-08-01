@@ -41,7 +41,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/action/:action_id:
+  /v1/ledger/action/:action_id:
     get:
       tags:
         - action
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/action/submit:
+  /v1/ledger/action/submit:
     post:
       tags:
         - action
@@ -111,7 +111,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity:
+  /v1/ledger/identity:
     post:
       tags:
         - identity
@@ -137,7 +137,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/actions:
+  /v1/ledger/identity/:id/actions:
     get:
       tags:
         - identity
@@ -172,7 +172,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/asset_units:
+  /v1/ledger/identity/:id/asset_units:
     get:
       tags:
         - identity
@@ -201,7 +201,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/close:
+  /v1/ledger/identity/:id/close:
     delete:
       tags:
         - identity
@@ -230,7 +230,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/identity/:id/rotate_key:
+  /v1/ledger/identity/:id/rotate_key:
     post:
       tags:
         - identity
@@ -265,7 +265,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract:
+  /v1/ledger/smartcontract:
     post:
       tags:
         - smartcontract
@@ -291,7 +291,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract/:smartcontract_address/close:
+  /v1/ledger/smartcontract/:smartcontract_address/close:
     post:
       tags:
         - smartcontract
@@ -313,7 +313,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract/:smartcontract_address/freeze_upgrade:
+  /v1/ledger/smartcontract/:smartcontract_address/freeze_upgrade:
     post:
       tags:
         - smartcontract
@@ -335,7 +335,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract/:smartcontract_address/upgrade:
+  /v1/ledger/smartcontract/:smartcontract_address/upgrade:
     post:
       tags:
         - smartcontract
@@ -363,7 +363,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract/dry_run:
+  /v1/ledger/smartcontract/dry_run:
     post:
       tags:
         - smartcontract
@@ -391,7 +391,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
-  /v1/smartcontract/execute:
+  /v1/ledger/smartcontract/execute:
     post:
       tags:
         - smartcontract
@@ -473,8 +473,6 @@ components:
       type: string
       description: ActionType
       enum:
-        - FungibleAssetAction
-        - NonFungibleAssetAction
         - CurrencyAction
         - PropertyAction
     AppError:
@@ -516,8 +514,6 @@ components:
       type: string
       description: AssetType
       enum:
-        - Fungible
-        - NonFungible
         - Currency
         - Property
     Context:
@@ -537,23 +533,12 @@ components:
           format: binary
     CurrencyAction:
       type: string
-      description: Actions on Currency
+      description: Actions on Currency or Bearer Assets
       enum:
         - Send
         - Receive
         - Tokenize
         - Detokenize
-    FungibleAssetAction:
-      type: string
-      description: Actions on Fungible Assets
-      enum:
-        - Send
-        - Receive
-        - Tokenize
-        - Detokenize
-        - Chargeback
-        - Lock
-        - Unlock
     NewIdentity:
       type: object
       description: New identity request.
@@ -582,14 +567,6 @@ components:
           type: string
         signature:
           $ref: '#/components/schemas/Signature'
-    NonFungibleAssetAction:
-      type: string
-      description: Actions on Non Fungible Assets
-      enum:
-        - Rent
-        - Lease
-        - Unlease
-        - TransferOwnership
     PropertyAction:
       type: string
       description: Actions on Non Fungible Assets
