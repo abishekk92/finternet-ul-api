@@ -1,14 +1,13 @@
 //! Identity route.
 
 use crate::error::AppResult;
-use crate::types::{ActionFilter, PublicKey, Signature};
+use crate::types::{PublicKey, Signature};
 use axum::extract::Path;
 use axum::{self, http::StatusCode, Json};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 /// New identity request.
-// TODO: Should probably just be a DID directly?
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct NewIdentity {
     signing_key: PublicKey, // Or could be bs58 encoded string
@@ -96,28 +95,6 @@ pub async fn close(_id: Path<String>) -> AppResult<StatusCode> {
     )
 )]
 pub async fn get_asset_units(_id: Path<String>) -> AppResult<StatusCode> {
-    Ok(StatusCode::OK)
-}
-
-/// Get past actions of an identity. The actions can be filtered by type, time, etc.
-#[utoipa::path(
-    get,
-    path = "/v1/ledger/identity/:id/actions",
-    request_body = ActionFilter,
-    responses(
-        (status = 200, description = "Asset Units retrieved successfully", body=StatusCode),
-        (status = NOT_FOUND, description = "Identity not found"),
-        (status = 500, description = "Asset Units retrieval wasn't successfull", body=AppError)
-    ),
-    params(
-        ("id" = String, Path, description = "Public key (or) signing key of the identity")
-    )
-)]
-pub async fn actions(
-    _id: Path<String>,
-    Json(action_filter): Json<ActionFilter>,
-) -> AppResult<StatusCode> {
-    tracing::info!("Getting actions: {:?}", action_filter);
     Ok(StatusCode::OK)
 }
 

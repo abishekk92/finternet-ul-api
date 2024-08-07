@@ -2,7 +2,7 @@
 
 use crate::{
     error::AppError,
-    routes::{action, health, identity, ping, smartcontract},
+    routes::{health, identity, ping, smartcontract},
     types::*,
 };
 use utoipa::OpenApi;
@@ -15,9 +15,6 @@ use utoipa::OpenApi;
                identity::rotate_key,
                identity::close,
                identity::get_asset_units,
-               identity::actions,
-               action::submit,
-               action::get,
                smartcontract::create,
                smartcontract::upgrade,
                smartcontract::close,
@@ -33,14 +30,6 @@ use utoipa::OpenApi;
                 SmartContractTransaction,
                 Context,
                 SignatureRecord,
-                Action,
-                ActionFilter,
-                ActionStatus,
-                ActionPayload,
-                ActionType,
-                AssetType,
-                CurrencyAction,
-                PropertyAction,
                 identity::NewIdentity,
                 identity::RotateKey,
                 smartcontract::NewSmartContract,

@@ -2,7 +2,7 @@
 
 use crate::{
     middleware::logging::{log_request_response, Logger},
-    routes::{action, fallback::notfound_404, health, identity, ping, smartcontract},
+    routes::{fallback::notfound_404, health, identity, ping, smartcontract},
 };
 use axum::{
     routing::{delete, get, post, put},
@@ -10,18 +10,12 @@ use axum::{
 };
 
 /// Setup main router for application.
-// TODO: Nest and reorganize routes in a more structured way
 pub fn setup_app_router() -> Router {
     let identity_router = Router::new()
         .route("/", post(identity::create))
         .route("/:id/rotate_key", post(identity::rotate_key))
         .route("/:id/close", delete(identity::close))
-        .route("/:id/asset_units", get(identity::get_asset_units))
-        .route("/:id/actions", get(identity::actions));
-
-    let action_router = Router::new()
-        .route("/", post(action::submit))
-        .route("/:action_id", get(action::get));
+        .route("/:id/asset_units", get(identity::get_asset_units));
 
     let smartcontract_router = Router::new()
         .route("/", post(smartcontract::create))
@@ -51,7 +45,6 @@ pub fn setup_app_router() -> Router {
 
     let ledger_router = Router::new()
         .nest("/identity", identity_router)
-        .nest("/action", action_router)
         .nest("/smartcontract", smartcontract_router);
 
     Router::new()
