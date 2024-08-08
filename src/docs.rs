@@ -37,7 +37,7 @@ use utoipa::OpenApi;
                 smartcontract::UpgradeSmartContract,
         )),
         tags(
-            (name = "", description = "ul-api service/middleware")
+            (name = "Finternet Unified Ledger API", description = "Finternet Unified Ledger API")
         )
     )]
 

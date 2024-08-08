@@ -485,5 +485,5 @@ components:
         signature:
           $ref: '#/components/schemas/Signature'
 tags:
-  - name: ""
-    description: ul-api service/middleware
+  - name: Finternet Unified Ledger API
+    description: Finternet Unified Ledger API

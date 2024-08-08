@@ -260,7 +260,7 @@ you should also update the `ApiDoc` struct in [*src/docs.rs*](./src/docs.rs):
         paths(health::healthcheck, ping::get),
         components(schemas(AppError)),
         tags(
-            (name = "", description = "ul-api service/middleware")
+            (name = "", description = "")
         )
     )]
 
