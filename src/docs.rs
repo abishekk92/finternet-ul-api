@@ -21,6 +21,7 @@ use utoipa::OpenApi;
                smartcontract::freeze_upgrade,
                smartcontract::execute,
                smartcontract::dry_run,
+               smartcontract::estimate_fee,
                health::healthcheck,
                ping::get,
         ),

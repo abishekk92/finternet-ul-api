@@ -286,6 +286,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AppError'
+  /v1/ledger/smartcontract/estimate_fee:
+    post:
+      tags:
+        - smartcontract
+      summary: Submit a transaction to get an estimate of the fee.
+      description: Submit a transaction to get an estimate of the fee.
+      operationId: estimate_fee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        "200":
+          description: Fee estimate for executing the transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+        "404":
+          description: Smartcontract not found
+        "500":
+          description: Fee could not be estimated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppError'
   /v1/ledger/smartcontract/execute:
     post:
       tags:
